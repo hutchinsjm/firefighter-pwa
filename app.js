@@ -1,4 +1,4 @@
-// app.js (Complete gear tracking with camera scanning and custom gear support)
+// app.js (Complete gear tracking with real barcode scanning)
 
 import {
     auth,
@@ -17,8 +17,16 @@ import {
     getDocs,
     deleteDoc,
     doc,
-    updateDoc
+    updateDoc,
+    getDoc
   } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+  
+  const codeReader = new ZXing.BrowserMultiFormatReader();
+
+//  import { BrowserMultiFormatReader } from './lib/index.min.js';
+
+  //const codeReader = new BrowserMultiFormatReader();
+
   
   const db = getFirestore();
   
@@ -161,44 +169,35 @@ import {
   
   startScanBtn.addEventListener('click', async () => {
     scannerContainer.style.display = 'block';
-    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-    scannerPreview.srcObject = stream;
-    currentStream = stream;
+    codeReader.decodeFromVideoDevice(null, scannerPreview, async (result, err) => {
+      if (result) {
+        const serial = result.getText();
+        const component = prompt(`Scanned serial: ${serial}\nWhich component is this? (e.g., coat, pants, helmet, boots, gloves, hood, or custom)`);
+        const selectedSetId = gearSetSelector.value;
+  
+        if (selectedSetId && component) {
+          const ref = doc(db, 'gearSets', selectedSetId);
+          const snap = await getDoc(ref);
+          const data = snap.data();
+  
+          if (["coat", "pants", "helmet", "boots", "gloves", "hood"].includes(component)) {
+            await updateDoc(ref, { [component]: serial });
+          } else {
+            const updatedExtras = Array.isArray(data.extras) ? [...data.extras, { label: component, serial }] : [{ label: component, serial }];
+            await updateDoc(ref, { extras: updatedExtras });
+          }
+          loadGearSets();
+          stopCamera();
+        }
+      }
+    });
   });
   
   function stopCamera() {
     if (currentStream) {
       currentStream.getTracks().forEach(track => track.stop());
       currentStream = null;
-      scannerContainer.style.display = 'none';
     }
+    codeReader.reset();
+    scannerContainer.style.display = 'none';
   }
-  
-  scannerPreview.addEventListener('click', async () => {
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    canvas.width = scannerPreview.videoWidth;
-    canvas.height = scannerPreview.videoHeight;
-    context.drawImage(scannerPreview, 0, 0, canvas.width, canvas.height);
-    const dataUrl = canvas.toDataURL();
-  
-    const serial = prompt('Scanned serial number (simulate with manual input):');
-    const component = prompt('Which component is this? (e.g., coat, pants, helmet, boots, gloves, hood, or custom label)');
-    const selectedSetId = gearSetSelector.value;
-  
-    if (selectedSetId && component && serial) {
-      const ref = doc(db, 'gearSets', selectedSetId);
-      const snap = await getDocs(collection(db, 'gearSets'));
-      const target = snap.docs.find(d => d.id === selectedSetId);
-      const data = target.data();
-  
-      if (["coat", "pants", "helmet", "boots", "gloves", "hood"].includes(component)) {
-        await updateDoc(ref, { [component]: serial });
-      } else {
-        const updatedExtras = Array.isArray(data.extras) ? [...data.extras, { label: component, serial }] : [{ label: component, serial }];
-        await updateDoc(ref, { extras: updatedExtras });
-      }
-      loadGearSets();
-    }
-  });
-  
