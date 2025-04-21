@@ -1,3 +1,4 @@
+import { FIREBASE_API_KEY } from './config.js';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import {
   getAuth,
@@ -8,7 +9,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCRWycPCXrJnfehFoN47U5bL4tbZBJtXT8",
+  apiKey: FIREBASE_API_KEY,
   authDomain: "hello-firey-world.firebaseapp.com",
   projectId: "hello-firey-world",
   storageBucket: "hello-firey-world.appspot.com",
