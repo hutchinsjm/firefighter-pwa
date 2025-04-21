@@ -1,0 +1,22 @@
+{
+  "name": "hello-world-pwa",
+  "version": "1.0.0",
+  "description": "Exposure Reporting App for Fire Departments",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "predeploy": "node copy-scripts.js",
+    "deploy": "firebase deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hutchinsjm/firefighter-pwa.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hutchinsjm/firefighter-pwa/issues"
+  },
+  "homepage": "https://github.com/hutchinsjm/firefighter-pwa#readme"
+}
