@@ -10,14 +10,47 @@
   <script type="module" src="app.js" defer></script>
 </head>
 <body>
-  <div id="app">
-    <h1>Welcome</h1>
-    <button id="login-google">Sign in with Google</button>
-    <button id="login-anon">Continue Anonymously</button>
-    <button id="logout" style="display:none;">Logout</button>
-    <div id="status"></div>
-  </div>
+    <div id="app">
+        <!-- Login View -->
+        <section id="login-view">
+          <h1>Welcome</h1>
+          <button id="login-google">Sign in with Google</button>
+          <button id="login-anon">Continue Anonymously</button>
+          <div id="status"></div>
+        </section>
+      
+        <!-- Main Menu View -->
+        <section id="main-menu" style="display: none;">
+          <h2>Welcome!</h2>
+          <button id="logout" style="display: none; position: absolute; top: 10px; right: 10px; z-index: 999;">Logout</button>
+          <button id="log-exposure-btn">Log Exposure</button>
+          <button id="gear-tracking-btn">Gear Tracking</button>
+          <button id="view-history-btn">View History</button>
+        </section>
+      
+        <!-- Gear Tracking View -->
+        <section id="gear-tracking" style="display: none;">
+          <h2>Manage Gear Sets</h2>
+          <input id="gear-set-name" placeholder="New Gear Set Name" />
+          <button id="create-gear-set">Create Set</button>
+      
+          <div id="gear-sets-list"></div>
+          <hr>
+      
+          <h3>Add Gear to Set</h3>
+          <select id="gear-set-selector"></select>
+          <button id="start-scan">Scan Gear Barcode</button>
+      
+          <div id="scanner-container" style="display:none;">
+            <video id="scanner-preview" autoplay playsinline></video>
+          </div>
+      
+          <div id="gear-items-list"></div>
+          <hr>
+      
+          <button id="back-home">Back to Home</button>
+        </section>
+      </div>
+      
 </body>
 </html>
-
-<script type="module" src="app.js" defer></script>

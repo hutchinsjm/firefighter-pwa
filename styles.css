@@ -10,4 +10,19 @@ body {
   text-align: center;
 }
 
+.mobile-ui .mobile-only {
+  display: block;
+}
+
+.desktop-ui .mobile-only {
+  display: none;
+}
+
+.mobile-ui .desktop-only {
+  display: none;
+}
+
+.desktop-ui .desktop-only {
+  display: block;
+}
 
