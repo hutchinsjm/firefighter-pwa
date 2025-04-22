@@ -29,7 +29,8 @@ import {
 } from './js/gear.js';
 
 import {
-  setupExposureForm
+  setupExposureForm,
+  countUnreportedIncidents
 } from './js/exposure.js';
 
 import {
@@ -127,6 +128,16 @@ window.addEventListener('DOMContentLoaded', () => {
     if (user) {
       currentUser = user;
       const userId = user.uid;
+      const badge = document.getElementById('exposure-badge');
+      if (badge) {
+        const count = await countUnreportedIncidents(user.uid);
+        if (count > 0) {
+          badge.innerText = count;
+          badge.style.display = 'inline-block';
+        } else {
+          badge.style.display = 'none';
+        }
+      }
       console.log('👤 User authenticated:', user.uid);
       document.getElementById('login-view').style.display = 'none';
       document.getElementById('logout').style.display = 'inline-block';

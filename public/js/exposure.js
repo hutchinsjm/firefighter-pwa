@@ -14,6 +14,24 @@ import {
   
   const db = getFirestore();
   
+  export async function countUnreportedIncidents(userId) {
+    const reportedSnap = await getDocs(query(collection(db, 'exposures'), where('userId', '==', userId)));
+    const reportedIncidentNumbers = new Set();
+    reportedSnap.forEach(doc => reportedIncidentNumbers.add(doc.data().incidentNumber));
+  
+    const allIncidentsSnap = await getDocs(collection(db, 'incidents'));
+    let unreportedCount = 0;
+  
+    allIncidentsSnap.forEach(doc => {
+      const incident = doc.data();
+      if (!reportedIncidentNumbers.has(incident.incidentNumber)) {
+        unreportedCount++;
+      }
+    });
+  
+    return unreportedCount;
+  }
+
   export async function setupExposureForm(userId) {
     const submitBtn = document.getElementById('submit-exposure');
     const cancelBtn = document.getElementById('cancel-exposure');

@@ -29,8 +29,21 @@
         style="display: none; position: absolute; top: 10px; right: 10px; z-index: 999;">Logout</button>
       <button id="profile-btn" style="display: none; position: absolute; top: 10px; left: 10px; z-index: 999;">Manage
         Profile</button>
-      <button id="log-exposure-btn">Log Exposure</button>
-      <button id="gear-tracking-btn">Gear Tracking</button>
+        <button id="log-exposure-btn" style="position: relative;">
+          Log Exposure
+          <span id="exposure-badge" style="
+            display: none;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: red;
+            color: white;
+            font-size: 0.75rem;
+            border-radius: 50%;
+            padding: 2px 6px;
+            line-height: 1;
+          ">0</span>
+        </button><button id="gear-tracking-btn">Gear Tracking</button>
       <button id="view-history-btn">View History</button>
     </section>
 
