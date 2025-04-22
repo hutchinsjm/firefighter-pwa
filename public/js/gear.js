@@ -19,8 +19,8 @@ import {
   export async function loadGearSets(userId) {
     const gearSetsList = document.getElementById('gear-sets-list');
     const gearSetSelector = document.getElementById('gear-set-selector');
-  
-    if (!gearSetsList || !gearSetSelector) return;
+
+    if (!gearSetSelector) return;
   
     gearSetsList.innerHTML = '';
     gearSetSelector.innerHTML = '';
@@ -104,38 +104,23 @@ import {
     });
   }
   
-/*
-  export function setupManualGearEntry(userId) {
-    const manualBtn = document.getElementById('enter-manual-gear');
-    const gearSetSelector = document.getElementById('gear-set-selector');
+  export async function populateGearDropdown(userId, selectorId = 'gear-set-selector') {
+    const selector = document.getElementById(selectorId);
+    if (!selector) {
+      console.warn(`⚠️ Dropdown element with ID '${selectorId}' not found.`);
+      return;
+    }
   
-    if (!manualBtn || !gearSetSelector) return;
+    const db = getFirestore();
+    const q = query(collection(db, 'gearSets'), where('userId', '==', userId));
+    const snap = await getDocs(q);
   
-    manualBtn.addEventListener('click', async () => {
-      const selectedSetId = gearSetSelector.value;
-      if (!selectedSetId) return;
-  
-      const serial = prompt("Enter the gear's serial number:");
-      if (!serial) return;
-  
-      const component = prompt("What component is this? (coat, pants, helmet, boots, gloves, hood, custom)");
-      if (!component) return;
-  
-      const ref = doc(getFirestore(), 'gearSets', selectedSetId);
-      const snap = await getDoc(ref);
-      const data = snap.data();
-  
-      if (["coat", "pants", "helmet", "boots", "gloves", "hood"].includes(component)) {
-        await updateDoc(ref, { [component]: serial });
-      } else {
-        const updatedExtras = Array.isArray(data.extras)
-          ? [...data.extras, { label: component, serial }]
-          : [{ label: component, serial }];
-        await updateDoc(ref, { extras: updatedExtras });
-      }
-  
-      await loadGearSets(userId);
-      showFloatingNotice(`Manually added ${serial} to ${component}`, 'green');
+    selector.innerHTML = '';
+    snap.forEach(doc => {
+      const opt = document.createElement('option');
+      opt.value = doc.id;
+      opt.textContent = doc.data().name;
+      selector.appendChild(opt);
     });
   }
-  */
+  

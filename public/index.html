@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js"></script>
   <script type="module" src="./app.js"></script>
 </head>
+
 <body>
   <div id="app">
     <!-- Login View -->
@@ -22,8 +24,11 @@
 
     <!-- Main Menu View -->
     <section id="main-menu" style="display: none;">
-      <h2>Welcome!</h2>
-      <button id="logout" style="display: none; position: absolute; top: 10px; right: 10px; z-index: 999;">Logout</button>
+      <h2 id="welcome-banner">Welcome!</h2>
+      <button id="logout"
+        style="display: none; position: absolute; top: 10px; right: 10px; z-index: 999;">Logout</button>
+      <button id="profile-btn" style="display: none; position: absolute; top: 10px; left: 10px; z-index: 999;">Manage
+        Profile</button>
       <button id="log-exposure-btn">Log Exposure</button>
       <button id="gear-tracking-btn">Gear Tracking</button>
       <button id="view-history-btn">View History</button>
@@ -58,17 +63,18 @@
       <h2>Log Exposure</h2>
       <form id="exposure-form">
         <label for="incident-input">Incident Number</label>
-        <input type="text" id="incident-input" placeholder="Enter incident number" required />
+        <input type="text" id="incident-input" placeholder="Enter incident number" />
 
         <label>Select from Known Incidents</label>
         <select id="incidentDropdown">
           <option value="">-- Choose Incident --</option>
         </select>
-        <span id="incident-tooltip" style="display:none;color:orange;font-size:0.9em;">Already submitted for this incident</span>
+        <span id="incident-tooltip" style="display:none;color:orange;font-size:0.9em;">Already submitted for this
+          incident</span>
         <button id="edit-incident-log" style="display:none;margin-left:10px;">Edit Log</button>
 
         <label>Date & Time</label>
-        <input type="datetime-local" id="datetime-input" required />
+        <input type="datetime-local" id="datetime-input" />
         <button type="button" id="set-today">Today</button>
         <button type="button" id="set-now">Now</button>
 
@@ -76,12 +82,11 @@
         <input type="text" id="incident-address" />
 
         <label>Fire Department</label>
-        <input type="text" name="department" />
+        <input type="text" id="incident-department" name="department" />
 
         <label>Incident Type</label>
-        <select name="incidentType" required>
-          <option value="">Select</option>
-          <option>Incident Response</option>
+        <select id="incidentType" name="incidentType">
+          <option selected>Incident Response</option>
           <option>In-Station</option>
           <option>Training</option>
         </select>
@@ -97,19 +102,72 @@
         </div>
 
         <label>Were you asleep at time of alarm?</label>
-        <label><input type="radio" name="asleep" value="Yes" required /> Yes</label>
-        <label><input type="radio" name="asleep" value="No" required /> No</label>
+        <label><input type="radio" name="asleep" value="Yes" /> Yes</label>
+        <label><input type="radio" name="asleep" value="No" checked /> No</label>
 
         <label>Notes</label>
-        <textarea name="notes"></textarea>
+        <textarea id="incident-notes" name="notes"></textarea>
 
         <label>Select Gear Set Used</label>
-        <select name="gearSetRef" id="gearSetDropdown" required></select>
+        <select id="exposure-gear-set-selector"></select>
 
-        <button type="submit">Submit Exposure</button>
+        <button type="button" id="submit-exposure">Submit Exposure</button>
         <button type="button" id="cancel-exposure" style="margin-left: 20px;">Cancel</button>
       </form>
     </section>
-  </div>
+
+  <!-- // Profile View -->
+  <section id="profile-view" class="view" style="display:none;">
+    <h2>Profile Information</h2>
+
+    <!-- Profile Picture Upload -->
+    <div id="avatar-placeholder" class="avatar-circle">AB</div>
+
+    <!-- Profile Form -->
+    <form id="profile-form">
+      <label>First Name <input type="text" id="profile-first-name"></label>
+      <label>Last Name <input type="text" id="profile-last-name"></label>
+      <label>Email <input type="email" id="profile-email"></label>
+      <label>SSN (Last 4) <input type="text" id="profile-ssn" maxlength="4"></label>
+      <label>IAFF Affiliate Local # <input type="text" id="profile-iaff"></label>
+      <label>Date of Birth <input type="date" id="profile-dob"></label>
+      <label>Gender
+        <select id="profile-gender">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </label>
+      <label>Race/Ethnicity <input type="text" id="profile-ethnicity"></label>
+      <label>Career Begin in Fire Service <input type="date" id="profile-career-start"></label>
+      <label>Shift Schedule <input type="text" id="profile-shift"></label>
+      <label>Current Tobacco Use
+        <select id="profile-tobacco">
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+      </label>
+      <label>Share data for research?
+        <select id="profile-research">
+          <option value="Yes">Yes</option>
+          <option value="No" selected>No</option>
+        </select>
+      </label>
+      <div id="consent-date-wrapper" style="display: none; margin-top: 0.5rem;">
+        <label for="consent-date">Consent Date:</label>
+        <input type="date" id="consent-date" readonly />
+      </div>
+      <label>Email Notifications
+        <select id="profile-email-notify">
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </label>
+
+      <button type="submit">Save Profile</button>
+      <button type="button" id="profile-cancel">Cancel</button>
+    </form>
+  </section>
+</div>
 </body>
+
 </html>
